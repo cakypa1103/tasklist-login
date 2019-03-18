@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\task;
+use App\Task;
 
 class TasksController extends Controller
 
@@ -16,11 +16,18 @@ class TasksController extends Controller
      */
     public function index()
     {
-    $tasks = Task::paginate(25);
+    $data = [];
+    if (\Auth::check()) {
+        $user = \Auth::user();
+        $tasks = Task::paginate(25);
+        
+        $data = [
+            'user' => $user,
+            'tasks' => $tasks,
+        ];
+    }        
 
-    return view('tasks.index', [
-    'tasks' => $tasks,
-    ]);
+    return view('welcome',$data);
     }
 
 
